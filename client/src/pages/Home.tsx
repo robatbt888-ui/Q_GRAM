@@ -12,6 +12,8 @@ import {
   Home as HomeIcon,
   ImagePlus,
   Instagram,
+  PlaySquare,
+  UsersRound,
   LogOut,
   MessageCircle,
   MoreHorizontal,
@@ -28,7 +30,7 @@ import { toast } from "sonner";
 import { filterQgramPosts, getQgramLikeCount } from "@/lib/qgram";
 
 type AuthMode = "login" | "signup";
-type Tab = "home" | "explore" | "saved" | "profile";
+type Tab = "home" | "explore" | "reels" | "messages" | "notifications" | "saved" | "profile" | "settings";
 
 type Story = {
   name: string;
@@ -198,6 +200,37 @@ function NavItem({ active, icon, label, onClick }: { active: boolean; icon: Reac
   return <button type="button" onClick={onClick} className={`group flex w-full items-center gap-4 rounded-2xl px-4 py-3 text-right text-sm font-bold transition ${active ? "bg-[#eef0ff] text-[#263b82]" : "text-[#82899e] hover:bg-[#f5f6fa] hover:text-[#263b82]"}`}><span className={`${active ? "text-[#263b82]" : "text-[#a3a8b8] group-hover:text-[#263b82]"}`}>{icon}</span><span>{label}</span>{active && <span className="mr-auto h-1.5 w-1.5 rounded-full bg-[#ff9771]" />}</button>;
 }
 
+
+function SecondaryPage({ tab, onTab, displayName }: { tab: Tab; onTab: (tab: Tab) => void; displayName: string }) {
+  const page = {
+    reels: { title: "ویدیوهای کوتاه", subtitle: "چیزهایی که حال تو را بهتر می‌کنند", icon: <PlaySquare size={21} /> },
+    messages: { title: "پیام‌ها", subtitle: "گفت‌وگوهای تو در یک نگاه", icon: <MessageCircle size={21} /> },
+    notifications: { title: "اعلان‌ها", subtitle: "از اتفاق‌های تازه باخبر شو", icon: <Bell size={21} /> },
+    settings: { title: "تنظیمات", subtitle: "کیو گرام را مطابق سلیقه‌ات تنظیم کن", icon: <Settings size={21} /> },
+  }[tab as "reels" | "messages" | "notifications" | "settings"];
+  const videos = [
+    { image: "photo-1516035069371-29a1b244cc32", title: "نور، قاب و یک لحظه‌ی آرام", user: "niloofar.visual" },
+    { image: "photo-1511497584788-876760111969", title: "یک قدم نزدیک‌تر به طبیعت", user: "amin.outdoor" },
+    { image: "photo-1500530855697-b586d89ba3ee", title: "صبح‌های الهام‌بخش", user: "sara.daily" },
+    { image: "photo-1529156069898-49953e39b3ac", title: "آدم‌ها، قصه‌ها و لبخندها", user: "people.of.q" },
+  ];
+  const messages = [
+    { name: "نگار رضایی", text: "این قاب خیلی قشنگ شده، آدرس کافه رو می‌فرستی؟", time: "۲ دقیقه پیش", image: "photo-1534528741775-53994a69daeb" },
+    { name: "پارسا نادری", text: "استوری جدیدت رو دیدم 👋", time: "۱ ساعت پیش", image: "photo-1506794778202-cad84cf45f1d" },
+    { name: "سارا محمدی", text: "فردا برای عکاسی آماده‌ای؟", time: "دیروز", image: "photo-1488426862026-3ee34a7d66df" },
+  ];
+  return <div dir="rtl" className="min-h-screen bg-[#f8f9fc] pb-24 text-[#202844]">
+    <header className="sticky top-0 z-30 border-b border-[#eceef5] bg-white/90 px-5 py-4 backdrop-blur-xl"><div className="mx-auto flex max-w-[760px] items-center justify-between"><BrandMark compact /><button type="button" onClick={() => onTab("home")} className="rounded-xl bg-[#f1f3fb] px-4 py-2 text-xs font-black text-[#263b82]">بازگشت به فید</button></div></header>
+    <main className="mx-auto max-w-[760px] px-4 py-8 sm:px-6"><div className="mb-7 flex items-start gap-4"><div className="grid h-12 w-12 place-items-center rounded-2xl bg-[#eef0ff] text-[#263b82]">{page.icon}</div><div><h1 className="text-2xl font-black tracking-[-.04em]">{page.title}</h1><p className="mt-1 text-sm text-[#9299aa]">{page.subtitle}</p></div></div>
+      {tab === "reels" && <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">{videos.map((video) => <button type="button" key={video.title} onClick={() => toast("پخش ویدیو در نسخه‌ی بعدی کامل‌تر می‌شود.")} className="group relative aspect-[.72] overflow-hidden rounded-[22px] bg-[#1d2746] text-right"><img src={`https://images.unsplash.com/${video.image}?auto=format&fit=crop&w=600&q=85`} alt={video.title} className="h-full w-full object-cover opacity-85 transition duration-300 group-hover:scale-105" /><div className="absolute inset-0 bg-gradient-to-t from-[#11182f]/90 via-transparent to-transparent" /><div className="absolute inset-x-3 bottom-3 text-white"><PlaySquare size={18} className="mb-2" /><p className="text-xs font-black leading-5">{video.title}</p><p className="mt-1 text-[10px] text-white/65">@{video.user}</p></div></button>)}</div>}
+      {tab === "messages" && <section className="overflow-hidden rounded-[26px] border border-[#eef0f6] bg-white">{messages.map((message, index) => <button type="button" key={message.name} onClick={() => toast(`گفت‌وگو با ${message.name} باز شد.`)} className={`flex w-full items-center gap-3 p-4 text-right transition hover:bg-[#fafbff] ${index ? "border-t border-[#f0f1f6]" : ""}`}><Avatar src={avatarUrl(message.image)} alt={message.name} size="md" ring /><span className="min-w-0 flex-1"><b className="block text-sm font-black">{message.name}</b><span className="mt-1 block truncate text-xs text-[#8e95a8]">{message.text}</span></span><span className="text-[10px] text-[#a6acba]">{message.time}</span></button>)}</section>}
+      {tab === "notifications" && <section className="space-y-3">{["الهام رضایی پست تو را پسندید.", "ماهان کریمی شروع به دنبال‌کردن تو کرد.", "یک استوری جدید از نگار منتشر شد.", "پست تو ۱۰ نظر تازه دریافت کرد."].map((text, index) => <button type="button" key={text} onClick={() => toast("اعلان خوانده شد.")} className="flex w-full items-center gap-3 rounded-2xl border border-[#eef0f6] bg-white p-4 text-right transition hover:-translate-y-0.5 hover:shadow-sm"><div className="grid h-10 w-10 place-items-center rounded-xl bg-[#fff0e8] text-[#ef815f]"><Bell size={18} /></div><span className="flex-1 text-sm font-bold text-[#4d5670]">{text}<small className="mt-1 block text-[10px] font-normal text-[#a2a8b6]">{index + 1} ساعت پیش</small></span><ChevronLeft size={17} className="text-[#aab0bf]" /></button>)}</section>}
+      {tab === "settings" && <section className="space-y-3">{[{ title: "حساب کاربری", desc: `${displayName} · اطلاعات و امنیت`, icon: <UserRound size={19} /> }, { title: "اعلان‌ها", desc: "انتخاب کن چه چیزهایی را ببینی", icon: <Bell size={19} /> }, { title: "حریم خصوصی", desc: "کنترل دیده‌شدن و تعاملات", icon: <UsersRound size={19} /> }, { title: "ظاهر برنامه", desc: "رنگ‌ها و حالت نمایش کیو گرام", icon: <Sparkles size={19} /> }].map((item) => <button type="button" key={item.title} onClick={() => toast(`${item.title} به‌زودی قابل ویرایش می‌شود.`)} className="flex w-full items-center gap-4 rounded-2xl border border-[#eef0f6] bg-white p-5 text-right transition hover:border-[#dce1f7]"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[#f1f3fb] text-[#263b82]">{item.icon}</span><span className="flex-1"><b className="block text-sm font-black">{item.title}</b><small className="mt-1 block text-xs text-[#969dae]">{item.desc}</small></span><ChevronLeft size={18} className="text-[#aab0bf]" /></button>)}</section>}
+    </main>
+    <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-[68px] items-center justify-around border-t border-[#eceef5] bg-white/95 px-3 backdrop-blur-xl"><button type="button" onClick={() => onTab("home")} className="text-[#a2a8ba]"><HomeIcon size={21} /></button><button type="button" onClick={() => onTab("explore")} className="text-[#a2a8ba]"><Compass size={21} /></button><button type="button" onClick={() => onTab("reels")} className={`grid h-11 w-11 place-items-center rounded-2xl ${tab === "reels" ? "bg-[#263b82] text-white" : "text-[#a2a8ba]"}`}><PlaySquare size={21} /></button><button type="button" onClick={() => onTab("messages")} className={tab === "messages" ? "text-[#263b82]" : "text-[#a2a8ba]"}><MessageCircle size={21} /></button><button type="button" onClick={() => onTab("profile")} className="text-[#a2a8ba]"><UserRound size={21} /></button></nav>
+  </div>;
+}
+
 export default function Home() {
   const { user, isAuthenticated, logout } = useAuth();
   const [demoUser, setDemoUser] = useState(false);
@@ -239,6 +272,7 @@ export default function Home() {
   );
 
   if (!signedIn) return <AuthScreen mode={authMode} setMode={setAuthMode} onDemoLogin={handleDemoLogin} />;
+  if (["reels", "messages", "notifications", "settings"].includes(activeTab)) return <SecondaryPage tab={activeTab} onTab={setActiveTab} displayName={displayName} />;
 
   return (
     <div dir="rtl" className="min-h-screen bg-[#f8f9fc] text-[#202844]">
@@ -251,7 +285,7 @@ export default function Home() {
       </header>
 
       <div className="mx-auto grid max-w-[1420px] grid-cols-1 gap-7 px-4 py-7 lg:grid-cols-[230px_minmax(0,1fr)_280px] lg:px-10">
-        <aside className="hidden lg:block"><div className="sticky top-[104px] space-y-7"><nav className="space-y-1"><NavItem active={activeTab === "home"} onClick={() => setActiveTab("home")} icon={<HomeIcon size={20} />} label="خانه" /><NavItem active={activeTab === "explore"} onClick={() => setActiveTab("explore")} icon={<Compass size={20} />} label="کاوش" /><NavItem active={false} onClick={() => toast("پیام‌ها به‌زودی در دسترس است.")} icon={<MessageCircle size={20} />} label="پیام‌ها" /><NavItem active={false} onClick={() => toast("اعلان‌ها به‌زودی در دسترس است.")} icon={<Bell size={20} />} label="اعلان‌ها" /><NavItem active={activeTab === "saved"} onClick={() => setActiveTab("saved")} icon={<Bookmark size={20} />} label="ذخیره‌ها" /></nav><div className="h-px bg-[#eceef4]" /><nav className="space-y-1"><NavItem active={activeTab === "profile"} onClick={() => setActiveTab("profile")} icon={<UserRound size={20} />} label="پروفایل من" /><NavItem active={false} onClick={() => toast("تنظیمات شخصی‌سازی به‌زودی اضافه می‌شود.")} icon={<Settings size={20} />} label="تنظیمات" /></nav><button type="button" onClick={() => { if (isAuthenticated) logout(); setDemoUser(false); }} className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-[#b0a0a9] transition hover:text-[#dd6e6e]"><LogOut size={20} /> خروج از حساب</button></div></aside>
+        <aside className="hidden lg:block"><div className="sticky top-[104px] space-y-7"><nav className="space-y-1"><NavItem active={activeTab === "home"} onClick={() => setActiveTab("home")} icon={<HomeIcon size={20} />} label="خانه" /><NavItem active={activeTab === "explore"} onClick={() => setActiveTab("explore")} icon={<Compass size={20} />} label="کاوش" /><NavItem active={activeTab === "reels"} onClick={() => setActiveTab("reels")} icon={<PlaySquare size={20} />} label="ویدیوهای کوتاه" /><NavItem active={activeTab === "messages"} onClick={() => setActiveTab("messages")} icon={<MessageCircle size={20} />} label="پیام‌ها" /><NavItem active={false} onClick={() => setActiveTab("notifications")} icon={<Bell size={20} />} label="اعلان‌ها" /><NavItem active={activeTab === "saved"} onClick={() => setActiveTab("saved")} icon={<Bookmark size={20} />} label="ذخیره‌ها" /></nav><div className="h-px bg-[#eceef4]" /><nav className="space-y-1"><NavItem active={activeTab === "profile"} onClick={() => setActiveTab("profile")} icon={<UserRound size={20} />} label="پروفایل من" /><NavItem active={false} onClick={() => setActiveTab("settings")} icon={<Settings size={20} />} label="تنظیمات" /></nav><button type="button" onClick={() => { if (isAuthenticated) logout(); setDemoUser(false); }} className="flex items-center gap-4 px-4 py-3 text-sm font-bold text-[#b0a0a9] transition hover:text-[#dd6e6e]"><LogOut size={20} /> خروج از حساب</button></div></aside>
 
         <main className="mx-auto w-full max-w-[700px] min-w-0">
           <div className="mb-6 flex items-end justify-between"><div><p className="mb-1 text-xs font-bold text-[#ff8c6d]">{activeTab === "home" ? "جمعه، ۲۷ شهریور" : "فضای شخصی تو"}</p><h1 className="text-[29px] font-black tracking-[-.05em] text-[#202844]">{activeTab === "home" ? `صبح بخیر، ${displayName.split(" ")[0]} 👋` : activeTab === "saved" ? "ذخیره‌های من" : activeTab === "profile" ? "پروفایل من" : "چیزهای تازه برای تو"}</h1></div><button type="button" onClick={() => toast("فید با آخرین پست‌ها به‌روزرسانی شد.")} className="hidden items-center gap-2 rounded-xl border border-[#e3e6f0] bg-white px-3 py-2 text-xs font-bold text-[#727a91] transition hover:border-[#cfd5ee] sm:flex"><Sparkles size={15} className="text-[#f09a73]" /> برای تو</button></div>
