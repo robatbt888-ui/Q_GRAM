@@ -1,42 +1,18 @@
 @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
-:root {
-  font-family: 'Vazirmatn', Tahoma, sans-serif;
-  color: #2a2113;
-  background: #fbfaf7;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-}
-
+:root { font-family: 'Vazirmatn', Tahoma, sans-serif; color: #f6f2e8; background: #090a0d; font-synthesis: none; text-rendering: optimizeLegibility; -webkit-font-smoothing: antialiased; --ease-out: cubic-bezier(0.23, 1, 0.32, 1); }
 * { box-sizing: border-box; }
-html { min-width: 320px; background: #fbfaf7; }
+html { min-width: 320px; background: #090a0d; }
 body { min-width: 320px; margin: 0; min-height: 100vh; }
 button, input, textarea { font: inherit; }
-button { cursor: pointer; }
-button:active { transform: scale(.98); }
-::selection { background: #dfe3ff; color: #9a6a10; }
-
-.auth-input {
-  height: 54px;
-  width: 100%;
-  border-radius: 16px;
-  border: 1px solid #e4e6ee;
-  background: #fff;
-  padding: 0 16px;
-  font-size: 13px;
-  color: #27304b;
-  outline: none;
-  transition: border-color 180ms var(--ease-out), box-shadow 180ms var(--ease-out), background 180ms var(--ease-out);
-}
-.auth-input::placeholder { color: #b5bac8; }
-.auth-input:focus { border-color: #aeb8e9; background: #fcfcff; box-shadow: 0 0 0 4px rgba(38, 59, 130, .08); }
-
+button { cursor: pointer; transition: transform 160ms var(--ease-out), background 180ms var(--ease-out), border-color 180ms var(--ease-out); }
+button:active { transform: scale(.97); }
+::selection { background: #d6a62a; color: #090a0d; }
+.gold-input { width: 100%; border: 1px solid rgba(214,166,42,.16); border-radius: 14px; background: rgba(255,255,255,.045); color: #fff; padding: 0 16px; outline: none; transition: border-color 180ms var(--ease-out), box-shadow 180ms var(--ease-out), background 180ms var(--ease-out); }
+.gold-input::placeholder { color: rgba(255,255,255,.3); }
+.gold-input:focus { border-color: #d6a62a; background: rgba(214,166,42,.06); box-shadow: 0 0 0 4px rgba(214,166,42,.1); }
+.auth-input { height: 54px; width: 100%; border-radius: 16px; border: 1px solid #e4e6ee; background: #fff; padding: 0 16px; font-size: 13px; color: #27304b; outline: none; }
 .scrollbar-none { scrollbar-width: none; }
 .scrollbar-none::-webkit-scrollbar { display: none; }
-
-@media (prefers-reduced-motion: no-preference) {
-  .group, button, input, textarea { transition-timing-function: var(--ease-out); }
-}
+@media (prefers-reduced-motion: no-preference) { .group, button, input, textarea { transition-timing-function: var(--ease-out); } }
