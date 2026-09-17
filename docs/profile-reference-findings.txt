@@ -1,0 +1,16 @@
+یافته‌های مرجع پروفایل کیو گرام از دو تصویر اول:
+
+- ظاهر موبایل تاریک با پس‌زمینه نزدیک به #0b0e13 و متن سفید/خاکستری.
+- Header پروفایل: دکمه + در چپ، قفل و username وسط، chevron، Threads/اتصال اجتماعی و منوی hamburger در راست.
+- Avatar بزرگ، نام نمایشی، آمار posts/followers/following و لینک Add your bio.
+- دو دکمه‌ی اصلی Edit profile و Share profile.
+- تب‌های محتوا: grid پست‌ها، ویدیو/Reels، repost و tagged/photos.
+- empty state: Create your first post، توضیح Make this space your own و دکمه Create.
+- bottom navigation موبایل: Home، Reels، Messages/Send، Search، Profile.
+- Settings موبایل به‌صورت لیست دسته‌بندی‌شده با dividerهای ضخیم و ردیف‌های آیکون‌دار است.
+- دسته‌ی How others interact with you شامل Hide story and live، Activity in Friends feed، Messages and story replies، Tags and mentions، Comments، Sharing، Restricted با count، Limit interactions با وضعیت، Hidden Words و Follow and invite friends.
+- دسته‌ی What you see شامل Favorites با count، Muted accounts با count، Content preferences و Like and share counts.
+- هر ردیف chevron راست دارد؛ بعضی ردیف‌ها وضعیت یا شمارنده در سمت چپ chevron نمایش می‌دهند.
+- این تصاویر نشان می‌دهند هدف فقط اضافه‌کردن گزینه نیست؛ باید shell موبایل، گروه‌بندی، آیکون‌ها، وضعیت empty state و رفتار routeها نیز بازسازی شود.
+
+دو تصویر بعدی ساختار کامل‌تر Settings and activity را نشان می‌دهند. صفحه با عنوان، back arrow و search field شروع می‌شود. سپس گروه‌های جدا با divider ضخیم دیده می‌شود: Your account با Accounts Center؛ How you use Instagram با Saved، Archive، Your activity، Notifications، Time management و Instagram for tablets؛ Who can see your content با Account privacy دارای وضعیت Private، Close Friends با count، Crossposting و Blocked با count؛ How others interact شامل موارد تصویر اول؛ What you see شامل Favorites، Muted accounts، Content preferences و Like/share counts؛ Your app and media شامل Device permissions، Archiving and downloading، Accessibility، Language and sound، Data usage and media quality و Website permissions؛ Family Center با Supervision for Teen Accounts؛ Your insights and tools با Account type and tools؛ Subscriptions با Instagram Plus، Meta Verified و All subscriptions. این گروه‌ها باید در نسخه‌ی موبایل کیو گرام به شکل sections و rows دارای icon، status/count و chevron پیاده شوند.
