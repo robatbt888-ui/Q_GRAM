@@ -4,7 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { protectedProcedure, publicProcedure, router } from "./_core/trpc";
 import { storagePut } from "./storage";
-import { addComment, createConversation, createPost, listConversations, listFeed, listMessages, listNotifications, listSavedFeed, searchUsers, sendMessage, toggleFollow, togglePostLike, togglePostSave, updateProfile } from "./socialDb";
+import { addComment, createConversation, createPost, getAccountSettings, listConversations, listFeed, listMessages, listNotifications, listSavedFeed, markNotificationsRead, searchUsers, sendMessage, toggleFollow, togglePostLike, togglePostSave, updateAccountSettings, updateProfile } from "./socialDb";
 
 const dataUrlSchema = z.string().regex(/^data:(image|video)\/[a-zA-Z0-9.+-]+;base64,/, "Invalid media data").max(15_000_000);
 
@@ -36,6 +36,19 @@ export const appRouter = router({
     comment: protectedProcedure.input(z.object({ postId: z.number().int().positive(), body: z.string().trim().min(1).max(1000) })).mutation(({ ctx, input }) => addComment(input.postId, ctx.user.id, input.body)),
     follow: protectedProcedure.input(z.object({ userId: z.number().int().positive() })).mutation(({ ctx, input }) => toggleFollow(ctx.user.id, input.userId)),
     notifications: protectedProcedure.query(({ ctx }) => listNotifications(ctx.user.id)),
+    markNotificationsRead: protectedProcedure.mutation(({ ctx }) => markNotificationsRead(ctx.user.id)),
+    settings: protectedProcedure.query(({ ctx }) => getAccountSettings(ctx.user.id)),
+    updateSettings: protectedProcedure.input(z.object({
+      privateAccount: z.boolean().optional(),
+      allowComments: z.boolean().optional(),
+      allowTags: z.enum(["everyone", "following", "nobody"]).optional(),
+      allowMentions: z.enum(["everyone", "following", "nobody"]).optional(),
+      pushNotifications: z.boolean().optional(),
+      emailNotifications: z.boolean().optional(),
+      archiveStories: z.boolean().optional(),
+      activityStatus: z.boolean().optional(),
+      language: z.string().min(2).max(16).optional(),
+    })).mutation(({ ctx, input }) => updateAccountSettings(ctx.user.id, input)),
     conversations: protectedProcedure.query(({ ctx }) => listConversations(ctx.user.id)),
     createConversation: protectedProcedure.input(z.object({ otherUserId: z.number().int().positive() })).mutation(({ ctx, input }) => createConversation(ctx.user.id, input.otherUserId)),
     messages: protectedProcedure.input(z.object({ conversationId: z.number().int().positive() })).query(({ ctx, input }) => listMessages(input.conversationId, ctx.user.id)),

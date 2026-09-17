@@ -1,5 +1,5 @@
 import { and, desc, eq, like, asc, sql } from "drizzle-orm";
-import { comments, conversationParticipants, conversations, follows, messages, notifications, postLikes, postSaves, posts, users } from "../drizzle/schema";
+import { accountSettings, comments, conversationParticipants, conversations, follows, messages, notifications, postLikes, postSaves, posts, users } from "../drizzle/schema";
 import { getDb } from "./db";
 
 const feedSelection = (viewerId: number) => ({
@@ -124,4 +124,29 @@ export async function sendMessage(conversationId: number, senderId: number, body
   if (!member.length) throw new Error("Conversation access denied");
   const result = await db.insert(messages).values({ conversationId, senderId, body });
   return result[0].insertId;
+}
+
+export async function getAccountSettings(userId: number) {
+  const db = await getDb();
+  if (!db) return undefined;
+  const existing = await db.select().from(accountSettings).where(eq(accountSettings.userId, userId)).limit(1);
+  if (existing.length) return existing[0];
+  await db.insert(accountSettings).values({ userId });
+  const created = await db.select().from(accountSettings).where(eq(accountSettings.userId, userId)).limit(1);
+  return created[0];
+}
+
+export async function updateAccountSettings(userId: number, input: Partial<Omit<typeof accountSettings.$inferInsert, "userId" | "updatedAt">>) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  await db.insert(accountSettings).values({ userId, ...input }).onDuplicateKeyUpdate({ set: input });
+  const updated = await db.select().from(accountSettings).where(eq(accountSettings.userId, userId)).limit(1);
+  return updated[0];
+}
+
+export async function markNotificationsRead(userId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database unavailable");
+  await db.update(notifications).set({ readAt: new Date() }).where(and(eq(notifications.userId, userId), sql`${notifications.readAt} is null`));
+  return true;
 }

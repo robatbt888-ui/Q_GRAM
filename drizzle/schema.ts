@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, primaryKey, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, primaryKey, text, timestamp, varchar, boolean } from "drizzle-orm/mysql-core";
 
 export const users = mysqlTable("users", {
   id: int("id").autoincrement().primaryKey(),
@@ -13,6 +13,20 @@ export const users = mysqlTable("users", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
+});
+
+export const accountSettings = mysqlTable("accountSettings", {
+  userId: int("userId").primaryKey(),
+  privateAccount: boolean("privateAccount").default(false).notNull(),
+  allowComments: boolean("allowComments").default(true).notNull(),
+  allowTags: mysqlEnum("allowTags", ["everyone", "following", "nobody"]).default("everyone").notNull(),
+  allowMentions: mysqlEnum("allowMentions", ["everyone", "following", "nobody"]).default("everyone").notNull(),
+  pushNotifications: boolean("pushNotifications").default(true).notNull(),
+  emailNotifications: boolean("emailNotifications").default(true).notNull(),
+  archiveStories: boolean("archiveStories").default(true).notNull(),
+  activityStatus: boolean("activityStatus").default(true).notNull(),
+  language: varchar("language", { length: 16 }).default("fa").notNull(),
+  updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
 });
 
 export const posts = mysqlTable("posts", {
@@ -85,3 +99,4 @@ export type User = typeof users.$inferSelect;
 export type InsertUser = typeof users.$inferInsert;
 export type Post = typeof posts.$inferSelect;
 export type InsertPost = typeof posts.$inferInsert;
+export type AccountSettings = typeof accountSettings.$inferSelect;

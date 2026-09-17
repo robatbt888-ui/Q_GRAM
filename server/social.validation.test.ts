@@ -21,4 +21,14 @@ describe("social input validation", () => {
     const caller = appRouter.createCaller(createContext());
     await expect(caller.social.uploadMedia({ dataUrl: "not-a-data-url", fileName: "x.txt", mimeType: "text/plain" })).rejects.toMatchObject({ code: "BAD_REQUEST" });
   });
+
+  it("rejects invalid account setting enums before persistence", async () => {
+    const caller = appRouter.createCaller(createContext());
+    await expect(caller.social.updateSettings({ allowTags: "invalid" as never })).rejects.toMatchObject({ code: "BAD_REQUEST" });
+  });
+
+  it("accepts boolean account setting input at the router boundary", async () => {
+    const caller = appRouter.createCaller(createContext());
+    await expect(caller.social.updateSettings({ privateAccount: true })).resolves.toBeDefined();
+  });
 });
